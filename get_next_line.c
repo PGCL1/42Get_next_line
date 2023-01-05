@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/05 17:34:12 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/05 17:46:05 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ char *string_copy(char *line, size_t N)
 
 char *get_next_line(int fd)
 {
-	int size_read;
+	char *content;
+	
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return NULL;
+	//need to find a way to integrate all above functions
 
 }
