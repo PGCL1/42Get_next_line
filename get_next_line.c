@@ -6,24 +6,49 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/04 18:20:29 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/05 17:34:12 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/**
- * function to allocate memory to pointer depending on buffer size
- * function to read the line
- * function to save the line in the pointer
- */
+int bytes_to_read(char *line, size_t N)
+{
+	size_t i;
+
+	i = 0;
+	while (line && line[i] != "\n")
+		i++;
+	if (i > N)
+		i = N;
+	return (i);
+}
+
+char *string_memory(char *line, size_t N)
+{
+	char *string;
+	N = bytes_to_read(line, N);
+	if (!N)
+		return NULL;
+	else
+		string = (char *)malloc(N*sizeof(char)-1);
+	return (string);
+}
+
+char *string_copy(char *line, size_t N)
+{
+	char *string;
+	string = string_memory(line, N);
+	
+	if (!string)
+		return NULL;
+	else
+		string = ft_strlcpy(string, line, N);
+	return (string);
+}
 
 char *get_next_line(int fd)
 {
-	if (fd == NULL || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return NULL;
-	while (fd)
-	{
-		//read file until encountering \n and then return the line
-	}
+	int size_read;
+
 }

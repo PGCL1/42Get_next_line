@@ -44,6 +44,6 @@ files:
 • get_next_line_utils_bonus.c
 
 
-read
+ssize_t read(int fs, void *buf, size_t N);
 malloc 
 free
