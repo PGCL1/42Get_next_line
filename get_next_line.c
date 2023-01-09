@@ -6,53 +6,58 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/06 19:07:52 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:06:57 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-//looking for character \n in buf
-char *end_of_line(char *buf)
+size_t search_endline (char *str)
 {
-	int i;
+	size_t i;
 
 	i = 0;
-	//if \n not present, buf is returned
-	if (!(ft_strchr(buf, "\n")))
-		return (buf);
-	else
-	{	//if \n is found
-		while (buf[i] != "\n")
-			i++;
-		i++;	
-	}
-	//not exactly sure how to proceed; I want to take away strlen - i characters from buf starting from the end and copy the remaining characters to a new string through strdup.
-	while (i >= 0)
-		return (ft_strdup(buf));
+	if (str && str[i] != '\n')
+		i++;
+	i++;
+	return (i);
+}
+
+char *stash_buf(char *buf)
+{
+	char *s1;
+
+	s1 = malloc(1);
+	return (ft_strjoin(s1, buf));
 }
 
 char *get_next_line(int fd)
 {
-	char *buf;
-	size_t nbytes;
-	size_t char_read;
+	char *buf = malloc(BUFFER_SIZE + 1);
+	static char *str;
+	char *line = malloc(100);
+	int char_read;
 
-	char_read = 0;
-	nbytes = BUFFER_SIZE;
-	buf = malloc((nbytes * sizeof(char)+1));
-	if (!buf || !fd)
-		return (NULL);
-	if (fd)
-		char_read = read(fd, buf, nbytes);
-	while (*buf)
+	char_read = 1;
+	while (char_read != 0)
 	{
-		if (char_read == 0)
+		char_read = read(fd, buf, BUFFER_SIZE);
+ 		if (char_read == -1)
 			return (NULL);
-		else if (!ft_strchr(buf, "\n"))
-			return (buf);
-		else if (ft_strchr(buf, "\n"))
-		//if \n is present than we need to identify where is \n and strdup from start of buf to \n included into line and return line
-		
+		str = stash_buf(buf);
+		//mistake only prints one character
+		ft_strlcpy(line, str, search_endline(str));
 	}
+	return (line);
+}
+
+int	main(void)
+{
+	char	*line;
+	int		fd;
+	fd = open("fd", O_RDONLY);
+	line = get_next_line(fd);
+	printf("%s", line);
+	fd = close(fd);
 }
