@@ -6,23 +6,12 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/09 17:06:57 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/10 18:06:59 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-
-size_t search_endline (char *str)
-{
-	size_t i;
-
-	i = 0;
-	if (str && str[i] != '\n')
-		i++;
-	i++;
-	return (i);
-}
 
 char *stash_buf(char *buf)
 {
@@ -34,21 +23,31 @@ char *stash_buf(char *buf)
 
 char *get_next_line(int fd)
 {
-	char *buf = malloc(BUFFER_SIZE + 1);
+	static char buf[BUFFER_SIZE + 1];
 	static char *str;
-	char *line = malloc(100);
+	char *line;
 	int char_read;
+	int limit;
 
 	char_read = 1;
 	while (char_read != 0)
 	{
 		char_read = read(fd, buf, BUFFER_SIZE);
- 		if (char_read == -1)
-			return (NULL);
 		str = stash_buf(buf);
-		//mistake only prints one character
-		ft_strlcpy(line, str, search_endline(str));
+		limit = pos_strchr(str, '\n');
+ 		if (char_read == -1 || read(fd, 0, 0) ||!ft_strchr(str, '\n'))
+		{
+			free (str);
+			str = NULL;
+			return (NULL);
+		}
+		else
+		{
+			line =(char *)malloc(limit * sizeof(char));
+			ft_strlcpy(line, str, limit);
+		}
 	}
+	free (line);
 	return (line);
 }
 

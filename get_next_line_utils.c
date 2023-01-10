@@ -6,24 +6,23 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:55:53 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/09 16:47:21 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/10 16:18:32 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/**
- * The function ft_substr() takes a string s, an unsigned int start, and a size_t
- * len, and returns a new string that is a substring of s, starting at index start
- * and of length len
- * 
- * @param s the string to be copied
- * @param start the starting index of the string to be copied
- * @param len the length of the substring
- * 
- * @return A pointer to a new string.
- */
 
+/**
+ * The function copies the string pointed to by src, including the terminating null
+ * byte ('\0'), to the buffer pointed to by dst
+ * 
+ * @param dst This is the destination string.
+ * @param src The string to be copied.
+ * @param dstsize The size of the destination buffer.
+ * 
+ * @return The length of the string src.
+ */
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	x;
@@ -103,4 +102,35 @@ char	*ft_strjoin(char *s1, char *s2)
 	}	
 	s3[i + j] = '\0';
 	return (s3);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (const char)c)
+		//returns the first occurence of c in the string s starting from the position in s which is equal to char c
+			return ((char *)s);
+		s++;
+	}
+	if (*s == (const char)c)
+	{
+		return ((char *)s);
+	}
+	return (NULL);
+}
+
+size_t pos_strchr(const char *s, int c)
+{
+	size_t i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (!(s[i] == (const char)c))
+			i++;
+		else
+			return (++i);
+	}
+	return (0);
 }

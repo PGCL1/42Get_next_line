@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:56:15 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/09 15:43:09 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/10 16:17:07 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
 # include <limits.h>
 
 char	*get_next_line(int fd);
-char	*ft_strchr(char *s, int c);
+char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(char *str);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
+size_t	pos_strchr(const char *s, int c);
 
 
 
