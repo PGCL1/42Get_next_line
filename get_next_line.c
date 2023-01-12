@@ -6,49 +6,49 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/10 18:06:59 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/12 19:25:15 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char *stash_buf(char *buf)
+char *read_n_save(int fd, char *buf)
 {
-	char *s1;
-
-	s1 = malloc(1);
-	return (ft_strjoin(s1, buf));
+	int char_read = 1;
+	while (!ft_strchr(buf, '\n') && char_read > 0)
+	{
+		char_read = read(fd, buf, BUFFER_SIZE);
+		if (char_read < 0)
+		{
+			free(buf);
+			return (NULL);
+		}
+		buf[char_read] = '\0';
+	}
+	free(buf);
+	return (stash);
 }
 
 char *get_next_line(int fd)
 {
-	static char buf[BUFFER_SIZE + 1];
-	static char *str;
-	char *line;
-	int char_read;
-	int limit;
-
-	char_read = 1;
-	while (char_read != 0)
+	static char *stash;
+	char *buf = malloc(BUFFER_SIZE * sizeof(char) + 1);
+	if (!buf)
+		return (NULL);
+	//error control
+	if (!fd ||  read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 	{
-		char_read = read(fd, buf, BUFFER_SIZE);
-		str = stash_buf(buf);
-		limit = pos_strchr(str, '\n');
- 		if (char_read == -1 || read(fd, 0, 0) ||!ft_strchr(str, '\n'))
-		{
-			free (str);
-			str = NULL;
-			return (NULL);
-		}
-		else
-		{
-			line =(char *)malloc(limit * sizeof(char));
-			ft_strlcpy(line, str, limit);
-		}
+		free (stash);
+		stash = NULL;	
+		return (NULL);	
 	}
-	free (line);
-	return (line);
+	stash = read_n_save(fd, buf);
+	//one function to read up and allocation of this in variable called stash
+	//read from stash the first line and put in variable line
+
+	//free stash
+	return stash;
 }
 
 int	main(void)
