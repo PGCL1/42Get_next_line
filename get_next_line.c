@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/13 20:18:23 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/15 19:35:01 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,18 @@ char *ft_read_n_stock(int fd)
 	return (stash);
 }
 
-char *endline(char *stash)
+char *search_endline(char *stash)
 {
-	int i;
-	char *line;
-	
-	i = 0;
+	int i = 0;
 	while (stash[i] != '\n')
 		i++;
-	line = malloc(i * sizeof(char) + 2);
-	while (stash[i++] != '\n')
-		line[i] += stash[i];
-	return line;
-		
+	i++;
+	char *line = malloc(i * sizeof(char) + 1);
+	if (!line)
+		return (NULL);
+	ft_strlcpy(line, stash, i);//not sure if +1 or +2
+	stash = ft_substr(stash, i + 1, ft_strlen(stash));
+	return line;	
 }
 
 char *get_next_line(int fd)
@@ -59,7 +58,7 @@ char *get_next_line(int fd)
 	//one function to read up to buffer size and stock contents in stash
 	stash = ft_read_n_stock(fd); 
 	//one function to look for the \n in stash if yes copying the contentns of stash in line and taking away the copyied chars from stash and leaving uncopied chars
-	line = endline(stash);
+	line = search_endline(stash);
 	//free stash
 	return line;
 }
@@ -70,5 +69,6 @@ int	main(void)
 	int		fd;
 	fd = open("fd", O_RDONLY);
 	line = get_next_line(fd);
+	printf("Line is equal: \n%s\n", line);
 	fd = close(fd);
 }

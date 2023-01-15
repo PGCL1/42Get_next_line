@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:55:53 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/13 19:29:08 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/15 19:27:17 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,51 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	}
 	return (NULL);
+}
+
+/*
+Description: copies up to dstsize - 1 characters from the string src to dst, NUL-terminating the result if dstsize is not 0.
+*/
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	x;
+	size_t	j;
+	size_t	y;
+
+	y = ft_strlen((char *)src);
+	x = 0;
+	while (src[x] != 0)
+		x++;
+	if (dstsize != 0)
+	{
+		j = 0;
+		while ((j + 1) < dstsize && src[j] != '\0')
+		{
+			dst[j] = src[j];
+			j++;
+		}
+	//null terminating the last position of dst
+		dst[j] = 0;
+	}
+	return (y);
+}
+
+char	*ft_substr(char *s, unsigned int start, size_t len)
+{
+	char	*s1;
+	size_t	length;
+
+	if (s == NULL)
+		return (NULL);
+	length = ft_strlen(start + s);
+	//if the length of s is smaller than len, then len takes the size of s
+	if (length < len)
+		len = length;
+	s1 = (char *)malloc(sizeof(char) * (len + 1));
+	if (!s1)
+		return (NULL);
+	//copies the string s to s1 from position s to len + 1
+	ft_strlcpy(s1, (s + start), (len + 1));
+	return (s1);
 }
