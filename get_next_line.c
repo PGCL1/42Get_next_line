@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 15:42:06 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:49:17 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*ft_read_n_stock(int fd, char *stash)
 		if (char_read == -1)
 		{
 			free(stash);
+			stash = NULL;
 			return (NULL);
 		}
 		buf[char_read] = '\0';
@@ -98,7 +99,6 @@ static char	*move_pos_stash(char *stash)
 	while (!stash[i])
 	{
 		free(stash);
-		stash = NULL;
 		return (NULL);
 	}
 	str = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
@@ -126,7 +126,11 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	{
+		free(stash);
+		stash = NULL;	
 		return (NULL);
+	}
 	stash = ft_read_n_stock(fd, stash);
 	line = search_endline(stash);
 	stash = move_pos_stash(stash);
