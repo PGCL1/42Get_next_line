@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 12:25:12 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:38:48 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,25 @@
 static char	*ft_read_n_stock(int fd, char *stash)
 {
 	int		char_read;
+	int		i;
 	char	buf[BUFFER_SIZE + 1];
 
+	i = 0;
 	char_read = 1;
 	while (char_read != 0)
 	{
 		char_read = read(fd, buf, BUFFER_SIZE);
 		if (char_read == -1)
+		{
+			free(stash);
 			return (NULL);
+		}
 		buf[char_read] = '\0';
 		stash = ft_strjoin(stash, buf);
+		while (buf[i] != '\0' && buf[i] != '\n')
+			i++;
+		if (buf[i] == '\n')
+			return (stash);
 	}
 	return (stash);
 }
@@ -57,18 +66,17 @@ static char	*search_endline(char *stash)
 		return (NULL);
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	line = malloc(i * sizeof(char) + 2);
+	line = malloc(sizeof(char) * (i + 2));
 	if (!line)
 		return (NULL);
 	j = 0;
 	while (j < i + 1)
 	{
 		line[j] = stash[j];
-		//printf("Line[%d] is equal to : %c\n", j, line[j]);
 		j++;
 	}
 	line[j] = '\0';
-	return (line);	
+	return (line);
 }
 
 /**
@@ -78,7 +86,7 @@ static char	*search_endline(char *stash)
  * 
  * @return a pointer to a string.
  */
-static char *move_pos_stash(char *stash)
+static char	*move_pos_stash(char *stash)
 {
 	size_t	i;
 	size_t	j;
@@ -87,13 +95,15 @@ static char *move_pos_stash(char *stash)
 	i = 0;
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	str = malloc(ft_strlen(stash) - i * sizeof(char) + 1);
-	if (!str)
+	while (!stash[i])
 	{
-		free(str);
-		str = NULL;
+		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
+	str = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
+	if (!str)
+		return (NULL);
 	i++;
 	j = 0;
 	while (i < ft_strlen(stash))
@@ -117,15 +127,11 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 	{
-		free (stash);
-		stash = NULL;
-		return (NULL);
+		
 	}
-	/* Reading the file and storing it in the static variable `stash`. */
-	stash = ft_read_n_stock(fd, stash); 
-	/* Searching for the endline character in the `stash` variable. */
+		return (NULL);
+	stash = ft_read_n_stock(fd, stash);
 	line = search_endline(stash);
-	/* Moving the position of the `stash` variable to the next line. */
 	stash = move_pos_stash(stash);
-	return line;
+	return (line);
 }
