@@ -6,19 +6,26 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/15 19:35:01 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:25:12 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char *ft_read_n_stock(int fd)
+/**
+ * It reads from a file descriptor, and stores the read data in a string
+ * 
+ * @param fd file descriptor
+ * @param stash the string that will be returned
+ * 
+ * @return A pointer to a string.
+ */
+static char	*ft_read_n_stock(int fd, char *stash)
 {
-	int char_read;
-	char buf[BUFFER_SIZE + 1];
-	char *stash = NULL;
-	
+	int		char_read;
+	char	buf[BUFFER_SIZE + 1];
+
 	char_read = 1;
 	while (char_read != 0)
 	{
@@ -31,44 +38,94 @@ char *ft_read_n_stock(int fd)
 	return (stash);
 }
 
-char *search_endline(char *stash)
+/**
+ * It searches for the end of a line in the stash, and returns a pointer to the
+ * beginning of the line
+ * 
+ * @param stash the string that contains the line to be returned
+ * 
+ * @return A pointer to a string.
+ */
+static char	*search_endline(char *stash)
 {
-	int i = 0;
-	while (stash[i] != '\n')
+	int		i;
+	int		j;
+	char	*line;
+
+	i = 0;
+	if (!stash[i])
+		return (NULL);
+	while (stash[i] && stash[i] != '\n')
 		i++;
-	i++;
-	char *line = malloc(i * sizeof(char) + 1);
+	line = malloc(i * sizeof(char) + 2);
 	if (!line)
 		return (NULL);
-	ft_strlcpy(line, stash, i);//not sure if +1 or +2
-	stash = ft_substr(stash, i + 1, ft_strlen(stash));
-	return line;	
+	j = 0;
+	while (j < i + 1)
+	{
+		line[j] = stash[j];
+		//printf("Line[%d] is equal to : %c\n", j, line[j]);
+		j++;
+	}
+	line[j] = '\0';
+	return (line);	
 }
 
-char *get_next_line(int fd)
+/**
+ * It moves the position of the stash pointer to the next line
+ * 
+ * @param stash the string that contains the data that we want to move
+ * 
+ * @return a pointer to a string.
+ */
+static char *move_pos_stash(char *stash)
 {
-	static char *stash;
-	char *line;
-	if (!fd ||  read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	str = malloc(ft_strlen(stash) - i * sizeof(char) + 1);
+	if (!str)
+	{
+		free(str);
+		str = NULL;
+		return (NULL);
+	}
+	i++;
+	j = 0;
+	while (i < ft_strlen(stash))
+		str[j++] = stash[i++];
+	str[j] = '\0';
+	free(stash);
+	return (str);
+}
+
+/**
+ * The function `get_next_line` reads a file and returns a line from it
+ * 
+ * @param fd file descriptor
+ * 
+ * @return a line of text from the file descriptor.
+ */
+char	*get_next_line(int fd)
+{
+	static char	*stash;
+	char		*line;
+
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 	{
 		free (stash);
-		stash = NULL;	
-		return (NULL);	
+		stash = NULL;
+		return (NULL);
 	}
-	//one function to read up to buffer size and stock contents in stash
-	stash = ft_read_n_stock(fd); 
-	//one function to look for the \n in stash if yes copying the contentns of stash in line and taking away the copyied chars from stash and leaving uncopied chars
+	/* Reading the file and storing it in the static variable `stash`. */
+	stash = ft_read_n_stock(fd, stash); 
+	/* Searching for the endline character in the `stash` variable. */
 	line = search_endline(stash);
-	//free stash
+	/* Moving the position of the `stash` variable to the next line. */
+	stash = move_pos_stash(stash);
 	return line;
-}
-
-int	main(void)
-{
-	char	*line;
-	int		fd;
-	fd = open("fd", O_RDONLY);
-	line = get_next_line(fd);
-	printf("Line is equal: \n%s\n", line);
-	fd = close(fd);
 }
