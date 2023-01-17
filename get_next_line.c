@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 15:38:48 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:42:06 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,6 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
-	{
-		
-	}
 		return (NULL);
 	stash = ft_read_n_stock(fd, stash);
 	line = search_endline(stash);
