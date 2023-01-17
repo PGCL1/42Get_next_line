@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 12:37:18 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 17:33:29 by glacroix         ###   ########.fr       */
+/*   Created: 2023/01/17 16:58:28 by glacroix          #+#    #+#             */
+/*   Updated: 2023/01/17 17:05:38 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <stdio.h>
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-int	main(void)
-{
-	char	*line;
-	int		fd, fd1;
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
-	fd = open("fd", O_RDONLY);
-	fd1 = open("fd1", O_RDONLY);
-	line = get_next_line(fd);
-	printf("%s", line);
-	line = get_next_line(fd1);
-	printf("%s", line);
-	//system ("./a.out");
-	//char c = 0; read(fd, &c, 1); check(c == '1'); ++iTest;
-	 //    /* 3 */ gnl(fd, NULL);}
-	fd = close(fd);
-}
+# ifndef NULL
+#  define NULL 0
+# endif
+
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <limits.h>
+# include <stdarg.h>
+
+char	*get_next_line_bonus(int fd, ...);
+size_t	ft_strlen(char *str);
+char	*ft_strjoin(char *s1, char *s2);
+
+#endif
