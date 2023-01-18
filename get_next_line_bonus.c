@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/18 18:08:59 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/18 18:42:46 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,26 +114,31 @@ static char	*move_pos_stash(char *stash)
 }
 
 /**
- * The function `get_next_line` reads a file and returns a line from it
+ * It reads from a file descriptor, and returns a line from it
  * 
- * @param fd file descriptor
+ * @param fd the file descriptor
  * 
- * @return a line of text from the file descriptor.
+ * @return A line of text from a file descriptor.
  */
 char	*get_next_line(int fd)
 {
 	static char	*stash[OPEN_MAX];
 	char		*line;
-	
+
 	if (fd < 0)
 		return (NULL);
-	if (BUFFER_SIZE <= 0 || fd >= OPEN_MAX /* || read(fd, 0, 0) <= 0 */)
+	if (BUFFER_SIZE <= 0 || fd >= OPEN_MAX || read(fd, 0, 0) < 0)
 	{
 		free(stash[fd]);
 		stash[fd] = NULL;
 		return (NULL);
 	}
 	stash[fd] = ft_read_n_stock(fd, stash[fd]);
+	if (!stash[fd])
+	{
+		free(stash[fd]);
+		return (NULL);
+	}
 	line = search_endline(stash[fd]);
 	stash[fd] = move_pos_stash(stash[fd]);
 	return (line);

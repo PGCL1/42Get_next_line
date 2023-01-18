@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:55:53 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 13:19:09 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/18 18:56:34 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	s3 = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2) + 1)));
 	if (!s3)
+	{
+		free(s3);
 		return (NULL);
+	}
 	i = -1;
 	while (s1[++i] != 0)
 		s3[i] = s1[i];
