@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 12:37:18 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 17:33:29 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/18 18:58:00 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,5 @@ int	main(void)
 	line = get_next_line(fd1);
 	printf("%s", line);
 	//system ("./a.out");
-	//char c = 0; read(fd, &c, 1); check(c == '1'); ++iTest;
-	 //    /* 3 */ gnl(fd, NULL);}
 	fd = close(fd);
 }
