@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 16:58:28 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 17:05:38 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:59:09 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-
+/* 
 # ifndef NULL
 #  define NULL 0
-# endif
+# endif */
 
 # include <unistd.h>
 # include <fcntl.h>

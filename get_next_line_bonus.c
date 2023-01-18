@@ -6,7 +6,7 @@
 /*   By: glacroix <glacroix@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:54:49 by glacroix          #+#    #+#             */
-/*   Updated: 2023/01/17 18:38:12 by glacroix         ###   ########.fr       */
+/*   Updated: 2023/01/18 18:08:59 by glacroix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,15 +124,21 @@ char	*get_next_line(int fd)
 {
 	static char	*stash[OPEN_MAX];
 	char		*line;
-
-	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
+	
+	if (fd < 0)
+		return (NULL);
+	if (BUFFER_SIZE <= 0 || fd >= OPEN_MAX /* || read(fd, 0, 0) <= 0 */)
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	stash = ft_read_n_stock(fd, stash);
-	line = search_endline(stash);
-	stash = move_pos_stash(stash);
+	stash[fd] = ft_read_n_stock(fd, stash[fd]);
+	line = search_endline(stash[fd]);
+	stash[fd] = move_pos_stash(stash[fd]);
 	return (line);
 }
+
+/** invalid fd 
+ * multiple fd 
+ * read_error.txt*/
